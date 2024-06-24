@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Document</title>
+</head>
+
+<body>
+  <form name="dataForm" action="">
+    <input type="hidden" name="img_file" id="img_file" />
+    <img src="" alt="" id="myimg" width="300" />
+    <br>
+    <input type="text" name="product_name" placeholder="產品名稱">
+    <br />
+    <button type="button" onclick="avatar.click()">上傳檔案</button>
+
+    <br />
+    <input type="submit" />
+  </form>
+
+  <form name="uploadForm" hidden>
+    <input type="file" name="avatar" accept="image/*" />
+  </form>
+
+  <script>
+    const avatar = document.uploadForm.avatar;
+    avatar.onchange = (event) => {
+      const fd = new FormData(document.uploadForm);
+
+      fetch("upload-avatar-api.php", {
+        method: "POST",
+        body: fd,
+      })
+        .then((r) => r.json())
+        .then((result) => {
+          if (result.success) {
+            // result.filename
+            img_file.value = result.filename;
+            myimg.src = `../img/members-img/${result.filename}`;
+          }
+
+        })
+        .catch((ex) => console.log(ex));
+    };
+  </script>
+</body>
+
+</html>
